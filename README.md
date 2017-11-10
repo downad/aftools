@@ -13,11 +13,17 @@ By leaving the arena the equipment would be cleard inthe player inventor
 	
 
 # Version
-0.1	initial - register some weapon and armor (ironwood)
+0.1		initial - register some weapon and armor (ironwood)
+0.2 	register some arenatools from default_tools
+0.2.1	register some armor from 3d_armor
 
 
-## Dependencies
+# Dependencies
 default 
+3d_armor?
+
+# textures
+a copie of the 3d_armor textures - they have been renamed because of the armor on player invertory
 
 # License
 Copyright (C) 2017 Ralf Weinert - email. ralf.weinert@gmx.de
