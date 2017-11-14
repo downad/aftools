@@ -23,6 +23,7 @@ function IsPlayerInArena(playername)
 
 	 -- create a table for removeItem
 	local removeItem = {}
+	local InventoryItem = {}
 	local withInto = 1
 	local withoutIntro = 0
 	local debugThis = 1
@@ -54,9 +55,14 @@ function IsPlayerInArena(playername)
 		for i = 1, playerInventory:get_size(searchInventory[invertoryPlace]) , 1 do
 			--local StackItem = playerInventory:get_stack("main", i):get_name()
 			local StackItem = playerInventory:get_stack(searchInventory[invertoryPlace], i):get_name()
+			local StackItemCount = playerInventory:get_stack(searchInventory[invertoryPlace], i):get_count()
+			
 			--print_log("Inventory["..i.."] "..StackItem:get_name())
 			print_log("Inventory["..i.."] "..StackItem,withoutIntro)
 				
+			-- add to the InventoryList	
+			table.insert(	InventoryItem, StackItem.." [ "..StackItemCount.." ] ")
+			
 			-- is this a aftools item?
 			if string.find(StackItem, "aftools:") then
 				-- fill the table with the name of aftools that must be removed
@@ -72,6 +78,10 @@ function IsPlayerInArena(playername)
 			print_log("["..ii.."] - "..ItemName,withoutIntro)
 		end
 	end	
+	
+	
+	-- save this to an file
+	tablesave(playername, InventoryItem)
 	
 -- end minetest.register_on_joinplayer(function(player)
 --end)

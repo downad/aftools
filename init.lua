@@ -26,6 +26,19 @@ function print_log(printstring, withIntro)
 	print("     "..printstring)
 end
 
+-- save table to file
+function tablesave(playername, ItemTable)
+   local file = io.open(minetest.get_worldpath().."/"..playername, "w")
+   if file then
+			for ii, ItemName in ipairs(ItemTable) do
+				-- file:write(minetest.serialize(ItemName))
+				file:write("["..ii.."] - "..ItemName.." \n ")
+			end
+      
+      file:close()
+   end
+end
+
 
 -- register tools
 dofile(THISMODPATH.."/default_tools.lua");
