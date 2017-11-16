@@ -16,6 +16,8 @@ By leaving the arena the equipment would be cleard inthe player inventor
 0.1		initial - register some weapon and armor (ironwood)
 0.2 	register some arenatools from default_tools
 0.2.1	register some armor from 3d_armor
+0.2.2 save a list of each player with his items
+0.2.3 load a file with items that should remove from all players
 
 
 # Dependencies

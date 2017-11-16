@@ -18,7 +18,8 @@ local THISMOD = minetest.get_current_modname()
 -- ModPath
 local THISMODPATH = minetest.get_modpath(THISMOD)
 
--- some print_log to print a info on the screen
+
+-- function print_log to print a info on the screen
 function print_log(printstring, withIntro)
 	if withIntro > 0 then
 		print("[MOD]"..THISMOD)
@@ -26,18 +27,10 @@ function print_log(printstring, withIntro)
 	print("     "..printstring)
 end
 
--- save table to file
-function tablesave(playername, ItemTable)
-   local file = io.open(minetest.get_worldpath().."/"..playername, "w")
-   if file then
-			for ii, ItemName in ipairs(ItemTable) do
-				-- file:write(minetest.serialize(ItemName))
-				file:write("["..ii.."] - "..ItemName.." \n ")
-			end
-      
-      file:close()
-   end
-end
+-- load the aftools lib
+dofile(THISMODPATH.."/aftools_lib.lua");
+minetest.log("action", "[MOD]"..THISMOD.." -- loaded default-tools")
+
 
 
 -- register tools
@@ -63,7 +56,7 @@ dofile(THISMODPATH.."/weapons.lua");
 -- load mod armor
 
 
--- load removeaft_ools functions
+-- load remove aftools functions
 dofile(THISMODPATH.."/remove_aftools.lua");
 
 -- init a globalstep
@@ -88,8 +81,13 @@ end)
 
 minetest.register_on_joinplayer(function(player)
 	--name of the player
-	local playername = player:get_player_name(playername)
+	local playername = player:get_player_name() --playername)
+	-- is there a File RemoveItemFile.aftools with Items to remove?
+	IsThereSomethingToRemove(playername)
+	
+	-- if player is leaving the arena - remove the arena tools
 	IsPlayerInArena(playername)
+		
 end)
 
 minetest.register_on_leaveplayer(function(player)
