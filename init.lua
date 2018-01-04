@@ -44,7 +44,12 @@ if mod_3d_armor then
 	dofile(THISMODPATH.."/3d_armor.lua");
 	minetest.log("action", "[MOD]"..THISMOD.." -- loaded 3d-Armor")
 end
-
+local mod_pvp_areas = minetest.get_modpath("pvp_areas")
+-- if yes - dofile
+if mod_pvp_areas then
+	-- dofile(THISMODPATH.."/3d_armor.lua");
+	minetest.log("action", "[MOD]"..THISMOD.." -- pvp-areas is present")
+end
 
 
 -- register armor
@@ -61,39 +66,34 @@ dofile(THISMODPATH.."/remove_aftools.lua");
 
 -- init a globalstep
 -- performance ?
---[[
-minetest.register_globalstep(function(dtime)
-	timer = timer + dtime;
-	if timer >= 1 then
-		timer=0
-			-- loop all player
-			-- check if player is in arena 
-			-- if yes - ok
-			-- if no ->remove aftools
-			--for _, plr in pairs(privilegeareas.userdata) do
-			--	privilegeareas.calculate_current_areas(plr)
-					IsPlayerInArena()
-			--end
 
-	end
+-- Globalstep - test if player is in an pvp-Area
+-- use AreaStore of pvp_area 
+minetest.register_globalstep(function(dtime)
+			for _, player in ipairs(minetest.get_connected_players()) do
+    		if mod_pvp_areas then
+    			--IsPlayerInTheArena(player) --name)
+    		end	
+  		end
 end)
-]]--
 
 minetest.register_on_joinplayer(function(player)
+	IsPlayerInTheArena(player) 
 	--name of the player
-	local playername = player:get_player_name() --playername)
+	--local playername = player:get_player_name() --playername)
 	-- is there a File RemoveItemFile.aftools with Items to remove?
-	IsThereSomethingToRemove(playername)
+	--IsThereSomethingToRemove(playername)
 	
 	-- if player is leaving the arena - remove the arena tools
-	IsPlayerInArena(playername)
+	--IsPlayerInArena(playername)
 		
 end)
 
 minetest.register_on_leaveplayer(function(player)
+	IsPlayerInTheArena(player) 
 	--name of the player
-	local playername = player:get_player_name()
-	IsPlayerInArena(playername)
+	--local playername = player:get_player_name()
+	--removeArenaItemsFromPlayer(playername)
 end)
 
 
