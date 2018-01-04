@@ -64,45 +64,25 @@ dofile(THISMODPATH.."/weapons.lua");
 -- load remove aftools functions
 dofile(THISMODPATH.."/remove_aftools.lua");
 
--- init a globalstep
--- performance ?
+
 
 -- Globalstep - test if player is in an pvp-Area
 -- use AreaStore of pvp_area 
 minetest.register_globalstep(function(dtime)
 			for _, player in ipairs(minetest.get_connected_players()) do
     		if mod_pvp_areas then
-    			--IsPlayerInTheArena(player) --name)
+    			IsPlayerInTheArena(player) 
     		end	
   		end
 end)
 
 minetest.register_on_joinplayer(function(player)
 	IsPlayerInTheArena(player) 
-	--name of the player
-	--local playername = player:get_player_name() --playername)
-	-- is there a File RemoveItemFile.aftools with Items to remove?
-	--IsThereSomethingToRemove(playername)
-	
-	-- if player is leaving the arena - remove the arena tools
-	--IsPlayerInArena(playername)
-		
 end)
 
 minetest.register_on_leaveplayer(function(player)
 	IsPlayerInTheArena(player) 
-	--name of the player
-	--local playername = player:get_player_name()
-	--removeArenaItemsFromPlayer(playername)
 end)
-
-
-
-
-
-
-
-
 
 -- log that the mod is loades 
 minetest.log("action", "[MOD]"..THISMOD.." -- loaded!")

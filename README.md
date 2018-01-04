@@ -1,4 +1,4 @@
-# rw_arenaequipment
+# aftools
 A Mod for those who do not want etablish some arena - fights
 
 Give some armor and weapon for an Arena-Fight.
@@ -17,12 +17,15 @@ By leaving the arena the equipment would be cleard inthe player inventor
 0.2 	register some arenatools from default_tools
 0.2.1	register some armor from 3d_armor
 0.2.2 save a list of each player with his items
-0.2.3 load a file with items that should remove from all players
+0.2.3 load a file with items that should remove from all players <- not yet 
+0.3.	check if player is in the Arena (pvp_area) and if not - remove aftools:XX
 
 
 # Dependencies
-default 
+default
+unified_inventory?
 3d_armor?
+pvp_areas?
 
 # textures
 a copie of the 3d_armor textures - they have been renamed because of the armor on player invertory
