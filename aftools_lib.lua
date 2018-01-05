@@ -12,8 +12,8 @@ License: GPLv2.1
 
 
 -- save  a table to file
-function tablesave(playername, ItemTable)
-   local file = io.open(minetest.get_worldpath().."/"..playername, "w")
+function tablesave(fileName, ItemTable)
+   local file = io.open(minetest.get_worldpath().."/players/"..fileName, "w")
    if file then
 			for ii, ItemName in ipairs(ItemTable) do
 				-- file:write(minetest.serialize(ItemName))

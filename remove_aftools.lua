@@ -9,10 +9,11 @@ License: GPLv2.1
 ]]--
 
 -- Inventory Manipulation
-function removeArenaItemsFromPlayer(playername)
-		minetest.chat_send_player( playername, "Now I am in the function removeArenaItemsFromPlayer ");
+function removeArenaItemsFromPlayer(player, saveInvDataToFile)
 
 	--some variables
+	local playername = player:get_player_name()
+
 	-- search in this inverory to destroy aftools 
 	local searchInventory = {"main", "craft", "armor"}
 
@@ -23,22 +24,22 @@ function removeArenaItemsFromPlayer(playername)
 	local withoutIntro = 0
 	
 	-- print more Informations
-	local debugThis = 1 -- 1 = yes
+	local debugThis = 0 -- 1 = yes
 	
-	--Use a player’s name to get their inventory:
+	--Use playername to get his inventory:
 	local playerInventory = minetest.get_inventory({type="player", name=playername})
 
+	-- print more Informations
 	if debugThis == 1 then
 		-- print on terminal 
 		print_log("Hello "..playername.."! - the Mod is looking for the arenafightingtools (aftools) and removing it from your inventory!", withInto)
-	
 		-- send player what is going on
 		minetest.chat_send_player( playername, "Hello "..playername.."! - the Mod is looking for the arenafightingtools (aftools) and removing them from your inventory!");
 	end
 	
 
-	--	loop for the different inventories (main and craft).
-	for invertoryPlace = 1, 3, 1 do
+	--	loop for the different inventories (main, craft ! armor is in an second loop ).
+	for invertoryPlace = 1, 2, 1 do
 		--loop playerInventory "main, craft, armor" to show item in the inventory
 		for i = 1, playerInventory:get_size(searchInventory[invertoryPlace]) , 1 do
 			--local StackItem = playerInventory:get_stack("main", i):get_name()
@@ -59,6 +60,18 @@ function removeArenaItemsFromPlayer(playername)
 				playerInventory:remove_item(searchInventory[invertoryPlace], StackItem) 
 			end
 		end
+		
+		-- loop armor
+		local inv = player:get_inventory()
+		for i = 1, 6 do
+			 local stack = inv:get_stack("armor", i)
+			 if stack and string.find(stack:get_name(), "aftools:") then
+				  armor:set_inventory_stack(player, i, nil)
+			 end
+		end
+		-- set restarmor
+		armor:set_player_armor(player)
+	
 	
 		-- print the aftool: - table
 		print_log("Removed playeritems with tag <aftools:> ",withoutIntro)
@@ -67,21 +80,25 @@ function removeArenaItemsFromPlayer(playername)
 		end
 	end	
 	
-	-- save this to an file
-	tablesave(playername, InventoryItem)
+	if saveInvDataToFile then
+		local saveFile = "inv_"..playername
+		-- save this to an file
+		--tablesave(playername, InventoryItem)
+		tablesave(saveFile, InventoryItem)
+	end
 
 end
 	
 -- the Globalstep calls this function
 -- if the player is in the Arena everysthing is ok
 -- if the player is out of the Arena remove all ArenaItems
-function IsPlayerInTheArena(player) --name, playerCoordiantes)
+function IsPlayerInTheArena(player, saveInvDataToFile) --name, playerCoordiantes)
 	
 	local playername = player:get_player_name()
 
 	-- prüfe auf adminPlayerName
 	if playername == minetest.setting_get("name") then
-		minetest.chat_send_player( playername, "Hello "..playername.."! - adminPlayer!")
+		--minetest.chat_send_player( playername, "Hello "..playername.."! - adminPlayer!")
 		return
 	end
 	
@@ -95,7 +112,7 @@ function IsPlayerInTheArena(player) --name, playerCoordiantes)
 	for k, v in pairs(pvp_areas_store:get_areas_for_pos(player:getpos())) do
 		inArena = false
 		if k then
-			minetest.chat_send_player( playername, "Hello  You, hello "..playername.."! - you are in the Arena! ".. playerCoordiantes);
+			--minetest.chat_send_player( playername, "Hello  You, hello "..playername.."! - you are in the Arena! ".. playerCoordiantes);
 			inArena = true
 		end
 		--minetest.chat_send_player( playername, "Hello "..playername.."! - inArena =  "..inArena);
@@ -103,13 +120,14 @@ function IsPlayerInTheArena(player) --name, playerCoordiantes)
 	end
 	
 	if inArena == false then
-		minetest.chat_send_player( playername, "Hello "..playername.."! - This is not the Arena! ");
+		--minetest.chat_send_player( playername, "Hello "..playername.."! - This is not the Arena! ");
+		--[[
 		for i = 1, 6 do
   		armor:set_inventory_stack(player, i, nil)
 		end
 		armor:set_player_armor(player)
-
-		--removeArenaItemsFromPlayer(playername)
+    ]]--
+		removeArenaItemsFromPlayer(player, saveInvDataToFile)
 	end
 	
 

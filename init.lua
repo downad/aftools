@@ -29,7 +29,7 @@ end
 
 -- load the aftools lib
 dofile(THISMODPATH.."/aftools_lib.lua");
-minetest.log("action", "[MOD]"..THISMOD.." -- loaded default-tools")
+minetest.log("action", "[MOD]"..THISMOD.." -- loaded aftools_lib")
 
 
 
@@ -68,20 +68,38 @@ dofile(THISMODPATH.."/remove_aftools.lua");
 
 -- Globalstep - test if player is in an pvp-Area
 -- use AreaStore of pvp_area 
+-- every 5 seconds
+local timer = 0
+minetest.register_globalstep(function(dtime)
+	timer = timer + dtime;
+	if timer >= 5 then
+			for _, player in ipairs(minetest.get_connected_players()) do
+    		if mod_pvp_areas then
+    			IsPlayerInTheArena(player, false) 
+    		end	
+  		end
+		timer = 0
+	end
+end)
+--[[
 minetest.register_globalstep(function(dtime)
 			for _, player in ipairs(minetest.get_connected_players()) do
     		if mod_pvp_areas then
-    			IsPlayerInTheArena(player) 
+    			IsPlayerInTheArena(player, false) 
     		end	
   		end
 end)
+]]--
 
+
+-- remove arenaTools on join
 minetest.register_on_joinplayer(function(player)
-	IsPlayerInTheArena(player) 
+	IsPlayerInTheArena(player, true) 
 end)
 
+-- remove arenaTools on join
 minetest.register_on_leaveplayer(function(player)
-	IsPlayerInTheArena(player) 
+	IsPlayerInTheArena(player, true) 
 end)
 
 -- log that the mod is loades 
